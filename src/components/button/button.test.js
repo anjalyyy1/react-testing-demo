@@ -16,17 +16,28 @@ describe("Shared button component", () => {
 
   describe("Renders", () => {
     let wrapper;
+    let mockFunc;
+
     beforeEach(() => {
+      mockFunc = jest.fn();
       const props = {
         buttonText: "Button text",
-        emitEvent: () => {},
+        emitEvent: mockFunc,
       };
 
       wrapper = shallow(<SharedButton {...props} />);
     });
+
     it("render a button", () => {
       const button = findByTestAtrr(wrapper, "buttonComponent");
       expect(button.length).toBe(1);
+    });
+
+    it("should emit cb on click event", () => {
+      const button = findByTestAtrr(wrapper, "buttonComponent");
+      button.simulate("click"); // means we clicked the button once
+      const callbacks = mockFunc.mock.calls.length; // the mock function should be called same of number of times the button was clicked
+      expect(callbacks).toBe(1);
     });
   });
 });
